@@ -15,6 +15,8 @@ const Body = () => {
       const response = await axios.get(`${BASE_URL}/check-user`, {
         withCredentials: true,
       });
+      console.log("in layout")
+      console.log(response.data)
       
       if (!response.data.success) {
         navigate("/");
