@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import NavbarSpecial from "./NavbarSpecial"
+import NavbarSpecial from "./NavbarSpecial";
 import Footer from "./Footer";
 import { BASE_URL } from "../utils/url";
 import axios from "axios";
@@ -15,15 +15,13 @@ const Body = () => {
       const response = await axios.get(`${BASE_URL}/check-user`, {
         withCredentials: true,
       });
-      console.log("in layout")
-      console.log(response)
+      console.log("in layout");
+      console.log(response);
       
-    
-        setUserType(response.data.userType);
-     
+      setUserType(response.data.userType);
       setIsLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       navigate("/");
     }
   };
@@ -33,18 +31,14 @@ const Body = () => {
   }, []);
   
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-    </div>;
+    return <div>Loading...</div>;
   }
   
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900">
+    <div className="layout-container">
       <NavbarSpecial userType={userType} />
-      <main className="flex-grow w-full mt-4 mb-4">
-        <div className="container mx-auto px-4">
-          <Outlet />
-        </div>
+      <main>
+        <Outlet />
       </main>
       <Footer />
     </div>
