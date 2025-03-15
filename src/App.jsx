@@ -14,7 +14,7 @@ import EachJobApplication from './Pages/EachJobApplication'
 import Profile from './Pages/Profile'
 import FApplications from './Pages/FApplications'
 import { Toaster } from 'sonner'
-
+import EachJobAdmin from './Pages/EachJobAdmin'
 
 function App() {
 
@@ -32,6 +32,7 @@ function App() {
       <Route path="/" element={<Layout/>}>
 <Route path="/freelancer" element={<Freelancer/>}/>
 <Route path="/jobposter" element={<JobPoster/>}/>
+<Route path="/jobs/:jobId" element={<EachJobAdmin/>}/>
 <Route path="/freelancer/job/:jobId" element={<EachJobApplication/>}/>
 <Route path="/profile" element={<Profile/>}/>
 <Route path="/freelancer/applications" element={<FApplications/>}/>
