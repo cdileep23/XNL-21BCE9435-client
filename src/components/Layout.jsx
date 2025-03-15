@@ -12,7 +12,7 @@ const Body = () => {
   
   const checkUser = async () => {
     try {
-      const response = await axios.get(BASE_URL + "/check-user", {
+      const response = await axios.get(`${BASE_URL}/check-user`, {
         withCredentials: true,
       });
       
