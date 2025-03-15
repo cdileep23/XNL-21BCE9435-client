@@ -5,6 +5,8 @@ import { Toaster, toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, ChevronLeft, ChevronRight, IndianRupee } from "lucide-react";
+import CreateJobDialog from "@/components/createNewJob";
+
 
 const JobPoster = () => {
   const [jobs, setJobs] = useState([]);
@@ -13,6 +15,7 @@ const JobPoster = () => {
   const [totalSpent, setTotalSpent] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false); // State for dialog visibility
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,6 +79,11 @@ const JobPoster = () => {
     setLoading(true);
     setError(null);
     fetchData();
+  };
+
+  // Function to handle job creation
+  const handleJobCreated = () => {
+    fetchData(); // Refresh all data after creating a job
   };
 
   // Get current jobs for pagination
@@ -142,6 +150,13 @@ const JobPoster = () => {
     <div className="container mx-auto px-4 py-8">
       <Toaster position="bottom-center" />
 
+      {/* Create Job Dialog */}
+      <CreateJobDialog 
+        open={createDialogOpen} 
+        onOpenChange={setCreateDialogOpen} 
+        onJobCreated={handleJobCreated} 
+      />
+
       <h1 className="text-3xl font-bold mb-8">Job Poster Dashboard</h1>
 
       {/* Stats Overview */}
@@ -175,16 +190,16 @@ const JobPoster = () => {
       <Card className="mb-8">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>All Jobs</CardTitle>
-          <Button asChild>
-            <Link to="/jobs/new">Post New Job</Link>
+          <Button onClick={() => setCreateDialogOpen(true)}>
+            Post New Job
           </Button>
         </CardHeader>
         <CardContent>
           {jobs.length === 0 ? (
             <div className="text-center p-6">
               <p className="mb-4">No jobs posted yet.</p>
-              <Button asChild>
-                <Link to="/jobs/new">Create your first job</Link>
+              <Button onClick={() => setCreateDialogOpen(true)}>
+                Create your first job
               </Button>
             </div>
           ) : (
@@ -321,8 +336,6 @@ const JobPoster = () => {
         </CardContent>
       </Card>
 
-      {/* Job Categories */}
-
       {/* Quick Actions */}
       <Card>
         <CardHeader>
@@ -330,8 +343,8 @@ const JobPoster = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
-            <Button asChild>
-              <Link to="/jobs/new">Post New Job</Link>
+            <Button onClick={() => setCreateDialogOpen(true)}>
+              Post New Job
             </Button>
 
             <Button variant="outline" asChild>

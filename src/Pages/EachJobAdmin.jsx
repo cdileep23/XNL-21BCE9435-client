@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import BidsForEachJob from '@/components/BidsForEachJob';
-import { IndianRupee, X } from 'lucide-react';
+import { IndianRupee, X, CheckCircle } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import {
   Dialog,
@@ -13,6 +13,111 @@ import {
   DialogTitle,
   DialogClose
 } from '@/components/ui/dialog';
+
+// MarkAsCompletedDialog Component
+const MarkAsCompletedDialog = ({ 
+  isOpen, 
+  onClose, 
+  jobId, 
+  onJobCompleted 
+}) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    
+    try {
+      const response = await axios.patch(
+        `http://localhost:7000/job/${jobId}/complete`,
+        { feedback }, // Optionally send feedback to backend
+        { withCredentials: true }
+      );
+      
+      // Call the callback to update parent state
+      onJobCompleted();
+      
+      // Close dialog
+      onClose();
+      
+      toast.success('Job marked as completed and payment processed');
+    } catch (err) {
+      console.error('Error marking job as completed:', err);
+      toast.error(err.response?.data?.message || 'Failed to complete job');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[525px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-xl font-semibold text-gray-800">
+            <CheckCircle className="text-green-500" size={24} />
+            Mark Job as Completed
+          </DialogTitle>
+          <DialogDescription>
+            This will finalize the job, process payment to the freelancer, and close the job.
+          </DialogDescription>
+        </DialogHeader>
+        
+        <form onSubmit={handleSubmit} className="py-4">
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <label htmlFor="feedback" className="text-sm font-medium text-gray-700">
+                Completion Feedback (Optional)
+              </label>
+              <textarea
+                id="feedback"
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                rows="4"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Add any feedback about the completed work..."
+              ></textarea>
+            </div>
+            
+            <div className="bg-yellow-50 p-4 rounded-md mt-2">
+              <p className="text-yellow-800 text-sm">
+                <strong>Important:</strong> Marking a job as completed will:
+              </p>
+              <ul className="list-disc ml-5 mt-2 text-yellow-800 text-sm">
+                <li>Process payment to the freelancer</li>
+                <li>Change job status to "completed"</li>
+                <li>Finalize the contract between both parties</li>
+              </ul>
+            </div>
+          </div>
+          
+          <DialogFooter className="mt-6">
+            <DialogClose asChild>
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+            </DialogClose>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center gap-2 ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+            >
+              {isSubmitting ? 'Processing...' : 'Complete Job'}
+              {!isSubmitting && <CheckCircle size={18} />}
+            </button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const EachJobAdmin = () => {
   const [job, setJob] = useState(null);
@@ -30,6 +135,9 @@ const EachJobAdmin = () => {
     skillsRequired: []
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // State for completion dialog
+  const [showCompletionDialog, setShowCompletionDialog] = useState(false);
 
   const fetchJobDetails = async () => {
     try {
@@ -66,16 +174,15 @@ const EachJobAdmin = () => {
       ...prevJob,
       status: newStatus
     }));
-  
   };
 
   // Function to handle closing a job
   const handleCloseJob = async () => {
     try {
-    const res=  await axios.patch(`http://localhost:7000/job/${jobId}/close`, {}, {
+      const res = await axios.patch(`http://localhost:7000/job/${jobId}/close`, {}, {
         withCredentials: true
       });
-      console.log(res)
+      console.log(res);
   
       setJob(prevJob => ({
         ...prevJob,
@@ -141,6 +248,7 @@ const EachJobAdmin = () => {
     }
   };
 
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -176,7 +284,6 @@ const EachJobAdmin = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg my-8">
-      {/* Sonner Toast Container */}
    
       
       {/* Header with Status Badge */}
@@ -185,6 +292,7 @@ const EachJobAdmin = () => {
         <div className={`mt-2 md:mt-0 px-4 py-1 rounded-full text-sm font-medium ${
           job.status === 'open' ? 'bg-green-100 text-green-800' : 
           job.status === 'in-progress' ? 'bg-blue-100 text-blue-800' : 
+          job.status === 'completed' ? 'bg-purple-100 text-purple-800' :
           job.status === 'closed' ? 'bg-red-100 text-red-800' :
           'bg-gray-100 text-gray-800'
         }`}>
@@ -260,7 +368,27 @@ const EachJobAdmin = () => {
             Close Job
           </button>
         )}
+        {job.status === 'in-progress' && (
+          <button 
+            onClick={() => setShowCompletionDialog(true)}
+            className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-md transition-colors"
+          >
+            Mark as Completed
+          </button>
+        )}
       </div>
+      {/* After the existing dialogs, add this line */}
+<MarkAsCompletedDialog 
+  isOpen={showCompletionDialog} 
+  onClose={() => setShowCompletionDialog(false)} 
+  jobId={jobId} 
+  onJobCompleted={() => {
+    setJob(prevJob => ({
+      ...prevJob,
+      status: 'completed'
+    }));
+  }} 
+/>
       
       {/* Bids Component - passing the job status update handler */}
       <BidsForEachJob jobId={jobId} onJobStatusUpdate={handleJobStatusUpdate} />
