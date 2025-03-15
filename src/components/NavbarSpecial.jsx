@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { BASE_URL } from '@/utils/url';
 
 const Navbar = ({ userType }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,7 +16,7 @@ const Navbar = ({ userType }) => {
   
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:7000/user/logout', {
+      await axios.get(`${BASE_URL}/user/logout`, {
         withCredentials: true
       });
       toast.success("User LogOut Successful")

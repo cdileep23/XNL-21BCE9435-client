@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, ChevronLeft, ChevronRight, IndianRupee } from "lucide-react";
 import CreateJobDialog from "@/components/createNewJob";
+import { BASE_URL } from "@/utils/url";
 
 
 const JobPoster = () => {
@@ -26,7 +27,7 @@ const JobPoster = () => {
     try {
       // Fetch all jobs created by this user
       const jobsResponse = await axios.get(
-        "http://localhost:7000/job/posted/me",
+        `${BASE_URL}/job/posted/me`,
         {
           withCredentials: true,
         }
@@ -50,7 +51,7 @@ const JobPoster = () => {
 
       try {
         const userResponse = await axios.get(
-          "http://localhost:7000/user/profile",
+          `${BASE_URL}/user/profile`,
           {
             withCredentials: true,
           }

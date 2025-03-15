@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogClose
 } from '@/components/ui/dialog';
+import { BASE_URL } from '@/utils/url';
 
 // MarkAsCompletedDialog Component
 const MarkAsCompletedDialog = ({ 
@@ -32,7 +33,7 @@ const MarkAsCompletedDialog = ({
     
     try {
       const response = await axios.patch(
-        `http://localhost:7000/job/${jobId}/complete`,
+        `${BASE_URL}/job/${jobId}/complete`,
         { feedback }, // Optionally send feedback to backend
         { withCredentials: true }
       );
@@ -141,7 +142,7 @@ const EachJobAdmin = () => {
 
   const fetchJobDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:7000/job/${jobId}`, {withCredentials: true});
+      const response = await axios.get(`${BASE_URL}/job/${jobId}`, {withCredentials: true});
       setJob(response.data);
       
       // Initialize edit form data
@@ -179,7 +180,7 @@ const EachJobAdmin = () => {
   // Function to handle closing a job
   const handleCloseJob = async () => {
     try {
-      const res = await axios.patch(`http://localhost:7000/job/${jobId}/close`, {}, {
+      const res = await axios.patch(`${BASE_URL}/job/${jobId}/close`, {}, {
         withCredentials: true
       });
       console.log(res);
@@ -228,7 +229,7 @@ const EachJobAdmin = () => {
       };
       
       const response = await axios.patch(
-        `http://localhost:7000/job/update/${jobId}`, 
+        `${BASE_URL}job/update/${jobId}`, 
         updateData, 
         { withCredentials: true }
       );

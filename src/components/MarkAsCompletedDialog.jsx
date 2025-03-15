@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogClose
 } from '@/components/ui/dialog';
+import { BASE_URL } from '@/utils/url';
 
 const MarkAsCompletedDialog = ({ 
   isOpen, 
@@ -28,7 +29,7 @@ const MarkAsCompletedDialog = ({
     
     try {
       const response = await axios.pach(
-        `http://localhost:7000/job/${jobId}/complete`,
+        `${BASE_URL}/job/${jobId}/complete`,
         {}, // Empty object since no feedback is needed
         { withCredentials: true }
       );

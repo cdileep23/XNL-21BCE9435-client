@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { IndianRupee } from 'lucide-react';
+import { BASE_URL } from '@/utils/url';
 
 const BidsForEachJob = ({ jobId, onJobStatusUpdate }) => {
   const [bids, setBids] = useState([]);
@@ -18,7 +19,7 @@ const BidsForEachJob = ({ jobId, onJobStatusUpdate }) => {
     const fetchBids = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/job/${jobId}/bids?page=${currentPage}&limit=${bidsPerPage}&sort=-createdAt`, 
+          `${BASE_URL}/job/${jobId}/bids?page=${currentPage}&limit=${bidsPerPage}&sort=-createdAt`, 
           { withCredentials: true }
         );
         
@@ -50,7 +51,7 @@ const BidsForEachJob = ({ jobId, onJobStatusUpdate }) => {
     setActionInProgress(true);
     try {
       // Updated endpoint to match the API
-      const res = await axios.patch(`http://localhost:7000/bids/${bidId}/accept`, {}, {
+      const res = await axios.patch(`${BASE_URL}/bids/${bidId}/accept`, {}, {
         withCredentials: true
       });
       console.log(res);
@@ -86,7 +87,7 @@ const BidsForEachJob = ({ jobId, onJobStatusUpdate }) => {
     setActionInProgress(true);
     try {
       // Updated endpoint to match the API
-      const res = await axios.patch(`http://localhost:7000/bids/${bidId}/reject`, {}, {
+      const res = await axios.patch(`${BASE_URL}/bids/${bidId}/reject`, {}, {
         withCredentials: true
       });
       

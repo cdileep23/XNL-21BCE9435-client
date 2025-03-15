@@ -8,6 +8,7 @@ import { Briefcase, Clock, Zap, Star, ExternalLink, Info, IndianRupee } from 'lu
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import _ from 'lodash';
+import { BASE_URL } from '@/utils/url';
 
 const JobMatchingPage = () => {
   const navigate = useNavigate();
@@ -24,12 +25,12 @@ const JobMatchingPage = () => {
         setLoading(true);
         
         // Fetch user profile and skills
-        const profileResponse = await axios.get('http://localhost:7000/user/profile', {
+        const profileResponse = await axios.get(`${BASE_URL}/user/profile`, {
           withCredentials: true
         });
         
         // Fetch open jobs
-        const jobsResponse = await axios.get('http://localhost:7000/jobs/open/apply', {
+        const jobsResponse = await axios.get(`${BASE_URL}/jobs/open/apply`, {
           withCredentials: true
         });
         

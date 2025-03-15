@@ -61,7 +61,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:7000/user/login",
+        `${BASE_URL}/user/login`,
         formData,
         { withCredentials: true }  
       );

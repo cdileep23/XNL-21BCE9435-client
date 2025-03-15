@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '@/utils/url';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -21,7 +22,7 @@ const Profile = () => {
   const fetchUserProfile = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:7000/user/profile',{withCredentials:true});
+      const response = await axios.get(`${BASE_URL}/user/profile`,{withCredentials:true});
       const data = response.data;
       console.log(data)
       setUser(data);
@@ -67,7 +68,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const response = await axios.patch('http://localhost:7000/user/profile', formData,{withCredentials:true});
+      const response = await axios.patch(`${BASE_URL}/user/profile`, formData,{withCredentials:true});
       setUser(response.data.user);
       setMessage(response.data.message);
       setIsEditing(false);

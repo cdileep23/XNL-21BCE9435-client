@@ -43,6 +43,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { BASE_URL } from '@/utils/url';
 
 const EachJobApplication = () => {
   const { jobId } = useParams();
@@ -61,7 +62,7 @@ const EachJobApplication = () => {
     const fetchJobDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:7000/job/${jobId}`, {
+        const response = await axios.get(`${BASE_URL}/job/${jobId}`, {
           withCredentials: true
         });
         setJob(response.data);
@@ -82,7 +83,7 @@ const EachJobApplication = () => {
     
     try {
       // Using the correct endpoint and field names as per your backend
-      const response = await axios.post(`http://localhost:7000/job/${jobId}/apply`, {
+      const response = await axios.post(`${BASE_URL}/job/${jobId}/apply`, {
         amount: Number(amount),
         deliveryTime: Number(deliveryTime),
         proposal

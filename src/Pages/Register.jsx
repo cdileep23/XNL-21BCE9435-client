@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import axios from "axios";
+import { BASE_URL } from "@/utils/url";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:7000/user/register",
+        `${BASE_URL}/user/register`,
         formData,
         { withCredentials: true } // Added withCredentials for cookie support
       );

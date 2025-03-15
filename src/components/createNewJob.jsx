@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { X, Plus, IndianRupee } from "lucide-react";
+import { BASE_URL } from "@/utils/url";
 
 const CreateJobDialog = ({ open, onOpenChange, onJobCreated }) => {
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ const CreateJobDialog = ({ open, onOpenChange, onJobCreated }) => {
     
     try {
       const response = await axios.post(
-        "http://localhost:7000/job/create",
+        `${BASE_URL}/job/create`,
         formData,
         { withCredentials: true }
       );

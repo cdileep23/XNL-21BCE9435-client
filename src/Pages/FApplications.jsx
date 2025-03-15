@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { BASE_URL } from '@/utils/url';
 
 
 const FApplications = () => {
@@ -16,7 +17,7 @@ const FApplications = () => {
   const fetchApplications = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:7000/job/applications/me',{withCredentials:true});
+      const response = await axios.get(`${BASE_URL}/job/applications/me`,{withCredentials:true});
       setApplications(response.data);
       setIsLoading(false);
     } catch (err) {
