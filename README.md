@@ -1,4 +1,5 @@
 # FreelanceHub Frontend
+Deployed Link: https://freelance-hub-client-six.vercel.app/
 
 A modern React-based platform that connects freelancers with job posters, featuring AI-powered job matching and comprehensive project management tools.
 
