@@ -16,14 +16,11 @@ const Body = () => {
         withCredentials: true,
       });
       console.log("in layout")
-      console.log(response.data)
+      console.log(response)
       
-      if (!response.data.success) {
-        navigate("/");
-      } else {
-        // Store the userType from the API response
+    
         setUserType(response.data.userType);
-      }
+     
       setIsLoading(false);
     } catch (error) {
       console.log(error)
